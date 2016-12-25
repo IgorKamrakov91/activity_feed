@@ -1,5 +1,5 @@
 class RepositoriesController < ApplicationController
-  before_action :set_repository, only: [:show, :edit, :update, :destroy]
+  before_action :set_repository, only: [:show, :edit, :update, :destroy, :bookmark]
 
   # GET /repositories
   # GET /repositories.json
@@ -61,12 +61,16 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  def bookmark
+    current_user.events.create(action: 'bookmarked',eventable: @repository)
+    redirect_to repositories_path
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_repository
       @repository = Repository.find(params[:id])
     end
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def repository_params
       params.require(:repository).permit(:name)

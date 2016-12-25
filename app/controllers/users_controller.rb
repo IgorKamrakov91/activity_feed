@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :follow]
 
   # GET /users
   # GET /users.json
@@ -59,6 +59,11 @@ class UsersController < ApplicationController
       format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def follow
+    current_user.events.create(action: 'followed',eventable: @user)
+    redirect_to users_path
   end
 
   private
